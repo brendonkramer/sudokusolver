@@ -29,7 +29,8 @@ def crop(file):
 def preprocess(file):
     img = cv2.imread(file)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    resized_transformed = cv2.resize(gray, (450, 450))
+    blur = cv2.GaussianBlur(gray, (3, 3), 6)
+    resized_transformed = cv2.resize(blur, (450, 450))
     return resized_transformed
 
 def create_grid(img):
@@ -38,19 +39,19 @@ def create_grid(img):
     for r in rows:
         cols = np.hsplit(r, 9)
         for box in cols:
-            boxes.append(box)
-    print(boxes)
+            box_shortened = box[5:45, 5:45]
+            boxes.append(box_shortened)
     return boxes
 
 def convert_to_int(img_arr):
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     arr = []
     for img in img_arr:
-        img = img[10:40, 10:40]
-        #plt.figure()
-        #plt.imshow(img)
-        #plt.show()
-        arr.append(pytesseract.image_to_string(img, lang='eng', config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789'))
+        # plt.figure()
+        # plt.imshow(img)
+        # plt.show()
+        num = pytesseract.image_to_string(img, lang='eng', config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
+        arr.append(num)
     print(arr)
     return arr
 
@@ -79,7 +80,4 @@ def process_image_file(file):
     img_arr = create_grid(img)
     int_puzzle_unmapped = convert_to_int(img_arr)
     final_puzzle = clean_up_puzzle(int_puzzle_unmapped)
-    plt.figure()
-
-    plt.show()
-    return img
+    return final_puzzle
