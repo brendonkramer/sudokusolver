@@ -5,35 +5,25 @@
 #imports
 import os
 import time
-import selenium.webdriver as webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+from config_file import file_name
 from image_processing import process_image_file
 import numpy as np
+from sudoku_solver import Solver
 from board import Board
 
 #constants
-file_name = "puzzle.png"
-
-def start():
-    driver = webdriver.Chrome()
-    driver.get('https://nine.websudoku.com/?')
-    time.sleep(1)
-    driver.maximize_window()
-    driver.get_screenshot_as_file(file_name)
-    puzzle = process_image_file(file_name)
-    print(puzzle)
-    first_cell = driver.find_elements(By.ID, 'f00')
-    try:
-        while True:
-            pass  # Do something
-    except KeyboardInterrupt:
-        pass
 
 
 if __name__ == '__main__':
-    start()
-
+    sudoku_solver = Solver()
+    try:
+        while True:
+            puzzle = process_image_file(file_name)
+            puzzle_board = Board(puzzle)
+            sudoku_solver.solve(puzzle)
+            sudoku_solver.next_puzzle()
+    except KeyboardInterrupt:
+        pass
 
 # puzzle = np.matrix([[0, 0, 3, 0, 2, 0, 6, 0, 0],
 #                     [9, 0, 0, 3, 0, 5, 0, 0, 1],
@@ -66,3 +56,4 @@ if __name__ == '__main__':
 #                     zero_count = zero_count - 1
 #
 # print(board.get_layout())
+

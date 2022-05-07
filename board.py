@@ -13,7 +13,7 @@ class Board:
   """
   Board instance
   """
-  def __init__(self, layout, parent=None, score=None):
+  def __init__(self, layout,score=None):
     """
     Constructor for Board
     :param layout: board layout to associate to this Board instance
@@ -26,7 +26,6 @@ class Board:
     self._layout = layout
     self._children = []
     self._siblings = []
-    self._parent = parent
     self._score = score
 
   #######################################################################################################################
@@ -67,51 +66,6 @@ class Board:
     :return: None
     """
     self._children.append(child)
-
-  #######################################################################################################################
-  # Function: num_parents
-  #######################################################################################################################
-  def num_parents(self):
-    """
-    Return the number of parents associated to this board
-    :return: the number of parents associated to this board
-    :rtype: int
-    """
-    num_moves = 0
-    state = self
-    while (state is not None):
-      state = state._parent
-      num_moves += 1
-    return num_moves
-
-  #######################################################################################################################
-  # Function: generate_score
-  #######################################################################################################################
-  def generate_score(self, goal):
-    """
-    Generate the manhattan distance + current moves and return it
-    :param goal: goal Board
-    :type goal: Board
-    :return: the manhattan distance + current moves
-    :rtype: int
-    """
-    goal_layout = goal.get_layout()
-    count = 0
-    this_row = 0
-    while this_row < 3:
-      this_col = 0
-      while this_col < 3:
-        goal_row = 0
-        while goal_row < 3:
-          goal_col = 0
-          while goal_col < 3:
-            if (self._layout[this_row][this_col] == goal_layout[goal_row][goal_col]):
-              count += (abs(this_row - goal_row) + abs(this_col - goal_col ))
-            goal_col+=1
-          goal_row+=1
-        this_col+=1
-      this_row+=1
-    self._score = count + self.num_parents()
 
   def get_domain(self, x_index, y_index):
     domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -178,8 +132,6 @@ class Board:
             if self._layout[y+6, x+6] in domain_list:
               domain_list.remove(self._layout[y+6, x+6])
     return domain_list
-
-
 
   #######################################################################################################################
   # Function: get_score

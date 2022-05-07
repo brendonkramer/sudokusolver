@@ -80,4 +80,5 @@ def process_image_file(file):
     img_arr = create_grid(img)
     int_puzzle_unmapped = convert_to_int(img_arr)
     final_puzzle = clean_up_puzzle(int_puzzle_unmapped)
+    print(final_puzzle)
     return final_puzzle
