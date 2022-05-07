@@ -19,7 +19,7 @@ class Driver():
     def start(self):
         self._driver.get('https://nine.websudoku.com/?')
         time.sleep(1)
-        #self._driver.maximize_window()
+        self._driver.maximize_window()
 
     def save_screen(self):
         self._driver.get_screenshot_as_file(file_name)

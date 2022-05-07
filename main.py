@@ -21,7 +21,7 @@ if __name__ == '__main__':
             size_and_loc = sudoku_solver.next_puzzle()
             puzzle = process_image_file(file_name, size_and_loc)
             puzzle_board = Board(puzzle)
-            sudoku_solver.solve(puzzle)
+            sudoku_solver.solve(puzzle_board)
     except KeyboardInterrupt:
         pass
 
@@ -36,24 +36,4 @@ if __name__ == '__main__':
 #                     [0, 0, 5, 0, 1, 0, 3, 0, 0]])
 #
 # board = Board(puzzle)
-# print(board.get_layout())
-# zero_count = 0
-# for y in range(9):
-#     for x in range(9):
-#         if board.get_layout()[y, x] == 0:
-#             zero_count = zero_count + 1
-#
-# while zero_count != 0:
-#     for y in range(9):
-#         for x in range(9):
-#             if board.get_layout()[y,x] == 0:
-#                 if len(board.get_domain(x,y)) == 1:
-#                     print(x)
-#                     print(y)
-#                     answer = board.get_domain(x,y)
-#                     print(answer)
-#                     board.get_layout()[y,x] = answer[0]
-#                     zero_count = zero_count - 1
-#
-# print(board.get_layout())
 
