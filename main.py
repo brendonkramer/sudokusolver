@@ -1,16 +1,33 @@
-# This is a sample Python script.
+#######################################################################################################################
+# File: main.py
+#
+#######################################################################################################################
+#imports
+import os
+import time
+import selenium.webdriver as webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from image_processing import process_image_file
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+#constants
+file_name = "puzzle.png"
+
+def start():
+    driver = webdriver.Chrome()
+    driver.get('https://nine.websudoku.com/?')
+    time.sleep(1)
+    driver.maximize_window()
+
+    driver.get_screenshot_as_file(file_name)
+    img = process_image_file(file_name)
+    first_cell = driver.find_elements(By.ID, 'f00')
+    try:
+        while True:
+            pass  # Do something
+    except KeyboardInterrupt:
+        pass
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    start()
