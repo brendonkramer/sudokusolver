@@ -115,57 +115,68 @@ class Board:
 
   def get_domain(self, x_index, y_index):
     domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    for i in range(9):
-      if self._layout[x_index][i] != 0:
-        domain_list.remove(self._layout[x_index][i])
-    for i in range(9):
-      if self._layout[i][y_index] != 0:
-        domain_list.remove(self._layout[i][y_index])
+    for x in range(9):
+      if self._layout[y_index, x] != 0:
+        if self._layout[y_index, x] in domain_list:
+          domain_list.remove(self._layout[y_index, x])
+    for y in range(9):
+      if self._layout[y, x_index] != 0:
+        if self._layout[y, x_index] in domain_list:
+          domain_list.remove(self._layout[y, x_index])
     if x_index < 3 and y_index < 3:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i][ii] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y, x] != 0:
+            if self._layout[y, x] in domain_list:
+              domain_list.remove(self._layout[y, x])
     if 2 < x_index < 6 and y_index < 3:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i+3][ii] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y, x+3] != 0:
+            if self._layout[y, x+3] in domain_list:
+              domain_list.remove(self._layout[y, x+3])
     if x_index > 5 and y_index < 3:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i + 6][ii] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y, x+6] != 0:
+            if self._layout[y, x+6] in domain_list:
+              domain_list.remove(self._layout[y, x+6])
     if x_index < 3 and 2 < y_index < 6:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i][ii+3] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y+3, x] != 0:
+            if self._layout[y+3, x] in domain_list:
+              domain_list.remove(self._layout[y+3, x])
     if 2 < x_index < 6 and 2 < y_index < 6:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i + 3][ii + 3] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y + 3, x + 3] != 0:
+            if self._layout[y+3, x+3] in domain_list:
+              domain_list.remove(self._layout[y+3, x+3])
     if x_index > 5 and 2 < y_index < 6:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i + 6][ii + 3] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y + 3,x + 6] != 0:
+            if self._layout[y+3, x+6] in domain_list:
+              domain_list.remove(self._layout[y+3, x+6])
     if x_index < 3 and y_index > 5:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i][ii + 6] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y+6,x] != 0:
+            if self._layout[y+6, x] in domain_list:
+              domain_list.remove(self._layout[y+6, x])
     if 2 < x_index < 6 and y_index > 5:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i + 3][ii + 6] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y + 6,x + 3] != 0:
+            if self._layout[y+6, x+3] in domain_list:
+              domain_list.remove(self._layout[y+6, x+3])
     if x_index > 5 and y_index > 5:
-      for i in range(3):
-        for ii in range(3):
-          if self._layout[i + 6][ii + 6] != 0:
-            domain_list.remove(self._layout[i][ii])
+      for y in range(3):
+        for x in range(3):
+          if self._layout[y + 6,x + 6] != 0:
+            if self._layout[y+6, x+6] in domain_list:
+              domain_list.remove(self._layout[y+6, x+6])
     return domain_list
 
 
