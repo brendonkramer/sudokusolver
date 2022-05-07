@@ -19,3 +19,4 @@ class Solver():
     def next_puzzle(self):
         #next puzzle
         self._sudoku_driver.save_screen()
+        return self._sudoku_driver.get_size_and_loc()

@@ -11,15 +11,16 @@ import pytesseract
 
 file_name = "puzzle_cropped.png"
 
-def crop(file):
+def crop(file, size_and_loc):
     img_to_crop = Image.open(file)
     width, height = img_to_crop.size
-
+    puzzle_size = size_and_loc[0]
+    puzzle_loc = size_and_loc[1]
     # Setting the points for cropped image
-    left = 915
-    top = 725
-    right = 1292
-    bottom = 347
+    left = puzzle_loc['x']
+    top = puzzle_loc['y'] + puzzle_size['height']
+    right = puzzle_loc['x'] + puzzle_size['width']
+    bottom = puzzle_loc['y']
     img_cropped = img_to_crop.crop((left, bottom, right, top))
 
     img_cropped.save(file_name)
@@ -29,7 +30,7 @@ def crop(file):
 def preprocess(file):
     img = cv2.imread(file)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (3, 3), 6)
+    blur = cv2.GaussianBlur(gray, (3, 3), 1)
     resized_transformed = cv2.resize(blur, (450, 450))
     return resized_transformed
 
@@ -51,6 +52,7 @@ def convert_to_int(img_arr):
         # plt.imshow(img)
         # plt.show()
         num = pytesseract.image_to_string(img, lang='eng', config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
+        #print(num)
         arr.append(num)
     print(arr)
     return arr
@@ -74,8 +76,8 @@ def clean_up_puzzle(puzzle_to_clean):
             index_col = 0
     return puzzle
 
-def process_image_file(file):
-    new_file = crop(file)
+def process_image_file(file, size_and_loc):
+    new_file = crop(file, size_and_loc)
     img = preprocess(new_file)
     img_arr = create_grid(img)
     int_puzzle_unmapped = convert_to_int(img_arr)

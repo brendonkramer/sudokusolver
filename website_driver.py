@@ -19,11 +19,17 @@ class Driver():
     def start(self):
         self._driver.get('https://nine.websudoku.com/?')
         time.sleep(1)
-        self._driver.maximize_window()
-        self.save_screen()
+        #self._driver.maximize_window()
 
     def save_screen(self):
         self._driver.get_screenshot_as_file(file_name)
 
+    def get_size_and_loc(self):
+        size = self._driver.find_element(By.ID, 'puzzle_grid').size
+        loc = self._driver.find_element(By.ID, 'puzzle_grid').location
+        return [size,loc]
+
     def enter(self, number):
         pass
+
+

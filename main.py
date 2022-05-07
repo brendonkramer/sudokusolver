@@ -18,10 +18,10 @@ if __name__ == '__main__':
     sudoku_solver = Solver()
     try:
         while True:
-            puzzle = process_image_file(file_name)
+            size_and_loc = sudoku_solver.next_puzzle()
+            puzzle = process_image_file(file_name, size_and_loc)
             puzzle_board = Board(puzzle)
             sudoku_solver.solve(puzzle)
-            sudoku_solver.next_puzzle()
     except KeyboardInterrupt:
         pass
 
