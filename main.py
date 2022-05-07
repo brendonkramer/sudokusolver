@@ -20,9 +20,9 @@ def start():
     driver.get('https://nine.websudoku.com/?')
     time.sleep(1)
     driver.maximize_window()
-
     driver.get_screenshot_as_file(file_name)
-    img = process_image_file(file_name)
+    puzzle = process_image_file(file_name)
+    print(puzzle)
     first_cell = driver.find_elements(By.ID, 'f00')
     try:
         while True:
