@@ -113,6 +113,63 @@ class Board:
       this_row+=1
     self._score = count + self.num_parents()
 
+  def get_domain(self, x_index, y_index):
+    domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    for i in range(9):
+      if self._layout[x_index][i] != 0:
+        domain_list.remove(self._layout[x_index][i])
+    for i in range(9):
+      if self._layout[i][y_index] != 0:
+        domain_list.remove(self._layout[i][y_index])
+    if x_index < 3 and y_index < 3:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i][ii] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if 2 < x_index < 6 and y_index < 3:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i+3][ii] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if x_index > 5 and y_index < 3:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i + 6][ii] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if x_index < 3 and 2 < y_index < 6:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i][ii+3] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if 2 < x_index < 6 and 2 < y_index < 6:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i + 3][ii + 3] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if x_index > 5 and 2 < y_index < 6:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i + 6][ii + 3] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if x_index < 3 and y_index > 5:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i][ii + 6] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if 2 < x_index < 6 and y_index > 5:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i + 3][ii + 6] != 0:
+            domain_list.remove(self._layout[i][ii])
+    if x_index > 5 and y_index > 5:
+      for i in range(3):
+        for ii in range(3):
+          if self._layout[i + 6][ii + 6] != 0:
+            domain_list.remove(self._layout[i][ii])
+    return domain_list
+
+
+
   #######################################################################################################################
   # Function: get_score
   #######################################################################################################################
