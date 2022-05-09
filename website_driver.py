@@ -14,7 +14,6 @@ class Driver():
 
     def __init__(self):
         self._driver = webdriver.Chrome()
-        self._first_cell = self._driver.find_elements(By.ID, 'f00')
 
     def start(self):
         self._driver.get('https://nine.websudoku.com/?')
@@ -29,7 +28,31 @@ class Driver():
         loc = self._driver.find_element(By.ID, 'puzzle_grid').location
         return [size,loc]
 
-    def enter(self, number):
-        pass
+    def set_value(self, x, y, value):
+        element = "//table[@id=\'puzzle_grid\']/tbody/tr"
+        if x == 0:
+            element += "/"
+        else:
+            element += "[" + str(y) + "]/"
+        if y == 0:
+            element += "td/"
+        else:
+            element += "td[" + str(x) + "]/"
+        element += "input"
+        web_element = self._driver.find_element(By.XPATH, element)
+        web_element.send_keys(str(value))
 
+    def submit(self):
+        submit_btn = self._driver.find_element(By.NAME, "submit")
+        submit_btn.click()
+        time.sleep(5)
+        self.set_difficulty()
 
+    def set_difficulty(self):
+        print("Input Difficulty:\n"
+              "1 - Easy\n"
+              "2 - Medium\n"
+              "3 - Hard\n"
+              "4 - Evil\n")
+        difficulty = input()
+        self._driver.get('https://nine.websudoku.com/?level=' + difficulty)
