@@ -55,4 +55,7 @@ class Driver():
               "3 - Hard\n"
               "4 - Evil\n")
         difficulty = input()
-        self._driver.get('https://nine.websudoku.com/?level=' + difficulty)
+        if difficulty == '1':
+            self._driver.get('https://nine.websudoku.com/?')
+        else:
+            self._driver.get('https://nine.websudoku.com/?level=' + difficulty)
