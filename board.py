@@ -75,80 +75,82 @@ class Board:
     def get_blanks(self):
         return self._blanks
 
-    def calculate_definite_elim(self, x_index, y_index):
-        if self._layout[y_index, x_index] == 0:
-            domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-            for x in range(9):
-                if self._layout[y_index, x] != 0:
-                    if self._layout[y_index, x] in domain_list:
-                        domain_list.remove(self._layout[y_index, x])
-            for y in range(9):
-                if self._layout[y, x_index] != 0:
-                    if self._layout[y, x_index] in domain_list:
-                        domain_list.remove(self._layout[y, x_index])
-            # box 1
-            if x_index < 3 and y_index < 3:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y, x] != 0:
-                            if self._layout[y, x] in domain_list:
-                                domain_list.remove(self._layout[y, x])
-            # box 2
-            if 2 < x_index < 6 and y_index < 3:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y, x + 3] != 0:
-                            if self._layout[y, x + 3] in domain_list:
-                                domain_list.remove(self._layout[y, x + 3])
-            # box 3
-            if x_index > 5 and y_index < 3:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y, x + 6] != 0:
-                            if self._layout[y, x + 6] in domain_list:
-                                domain_list.remove(self._layout[y, x + 6])
-            # box 4
-            if x_index < 3 and 2 < y_index < 6:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 3, x] != 0:
-                            if self._layout[y + 3, x] in domain_list:
-                                domain_list.remove(self._layout[y + 3, x])
-            # box 5
-            if 2 < x_index < 6 and 2 < y_index < 6:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 3, x + 3] != 0:
-                            if self._layout[y + 3, x + 3] in domain_list:
-                                domain_list.remove(self._layout[y + 3, x + 3])
-            # box 6
-            if x_index > 5 and 2 < y_index < 6:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 3, x + 6] != 0:
-                            if self._layout[y + 3, x + 6] in domain_list:
-                                domain_list.remove(self._layout[y + 3, x + 6])
-            # box 7
-            if x_index < 3 and y_index > 5:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 6, x] != 0:
-                            if self._layout[y + 6, x] in domain_list:
-                                domain_list.remove(self._layout[y + 6, x])
-            # box 8
-            if 2 < x_index < 6 and y_index > 5:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 6, x + 3] != 0:
-                            if self._layout[y + 6, x + 3] in domain_list:
-                                domain_list.remove(self._layout[y + 6, x + 3])
-            # box 9
-            if x_index > 5 and y_index > 5:
-                for y in range(3):
-                    for x in range(3):
-                        if self._layout[y + 6, x + 6] != 0:
-                            if self._layout[y + 6, x + 6] in domain_list:
-                                domain_list.remove(self._layout[y + 6, x + 6])
+    def calculate_definite_elim(self):
+        for y_index in range(9):
+            for x_index in range(9):
+                if self._layout[y_index, x_index] == 0:
+                    domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    for x in range(9):
+                        if self._layout[y_index, x] != 0:
+                            if self._layout[y_index, x] in domain_list:
+                                domain_list.remove(self._layout[y_index, x])
+                    for y in range(9):
+                        if self._layout[y, x_index] != 0:
+                            if self._layout[y, x_index] in domain_list:
+                                domain_list.remove(self._layout[y, x_index])
+                    #box 1
+                    if x_index < 3 and y_index < 3:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y, x] != 0:
+                                    if self._layout[y, x] in domain_list:
+                                        domain_list.remove(self._layout[y, x])
+                    #box 2
+                    if 2 < x_index < 6 and y_index < 3:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y, x + 3] != 0:
+                                    if self._layout[y, x + 3] in domain_list:
+                                        domain_list.remove(self._layout[y, x + 3])
+                    #box 3
+                    if x_index > 5 and y_index < 3:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y, x + 6] != 0:
+                                    if self._layout[y, x + 6] in domain_list:
+                                        domain_list.remove(self._layout[y, x + 6])
+                    #box 4
+                    if x_index < 3 and 2 < y_index < 6:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 3, x] != 0:
+                                    if self._layout[y + 3, x] in domain_list:
+                                        domain_list.remove(self._layout[y + 3, x])
+                    #box 5
+                    if 2 < x_index < 6 and 2 < y_index < 6:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 3, x + 3] != 0:
+                                    if self._layout[y + 3, x + 3] in domain_list:
+                                        domain_list.remove(self._layout[y + 3, x + 3])
+                    #box 6
+                    if x_index > 5 and 2 < y_index < 6:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 3, x + 6] != 0:
+                                    if self._layout[y + 3, x + 6] in domain_list:
+                                        domain_list.remove(self._layout[y + 3, x + 6])
+                    #box 7
+                    if x_index < 3 and y_index > 5:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 6, x] != 0:
+                                    if self._layout[y + 6, x] in domain_list:
+                                        domain_list.remove(self._layout[y + 6, x])
+                    #box 8
+                    if 2 < x_index < 6 and y_index > 5:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 6, x + 3] != 0:
+                                    if self._layout[y + 6, x + 3] in domain_list:
+                                        domain_list.remove(self._layout[y + 6, x + 3])
+                    #box 9
+                    if x_index > 5 and y_index > 5:
+                        for y in range(3):
+                            for x in range(3):
+                                if self._layout[y + 6, x + 6] != 0:
+                                    if self._layout[y + 6, x + 6] in domain_list:
+                                        domain_list.remove(self._layout[y + 6, x + 6])
 
             # print(domain_list)
             if len(domain_list) == 1:
@@ -158,7 +160,7 @@ class Board:
                     domain_list = []
             self._domains[y_index][x_index] = domain_list
 
-    def calculate_single_instances(self, x_index, y_index):
+    def calculate_single_instances(self):
         for y in range(9):
             domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             for x in range(9):
@@ -181,10 +183,13 @@ class Board:
                         domain_count_list[7] += 1
                     elif num == 9:
                         domain_count_list[8] += 1
-                for i in range(len(domain_count_list)):
-                    if domain_count_list[i] == 1:
-                        self._domains[y][x] = []
-                        self._layout[y, x] = i
+            for i in range(9):
+                if domain_count_list[i] == 1:
+                    for x in range(9):
+                        if i+1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i+1
+
 
         for x in range(9):
             domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -208,262 +213,291 @@ class Board:
                         domain_count_list[7] += 1
                     elif num == 9:
                         domain_count_list[8] += 1
-                for i in range(len(domain_count_list)):
-                    if domain_count_list[i] == 1:
-                        self._domains[y][x] = []
-                        self._layout[y, x] = i
-        # first box
-        if x_index < 3 and y_index < 3:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3):
-                for x in range(3):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
+            for i in range(9):
                 if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+                    for y in range(9):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
+        #first box
 
-        if 2 < x_index < 6 and y_index < 3:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3):
-                for x in range(3, 6):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3):
+                    for x in range(3):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
 
-        if x_index > 5 and y_index < 3:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3):
-                for x in range(6, 9):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
 
-        if x_index < 3 and 2 < y_index < 6:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3, 6):
-                for x in range(3):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3):
+                    for x in range(3, 6):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
 
-        if 2 < x_index < 6 and 2 < y_index < 6:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3, 6):
-                for x in range(3, 6):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
 
-        if x_index > 5 and 2 < y_index < 6:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(3, 6):
-                for x in range(6, 9):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3):
+                    for x in range(6, 9):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
 
-        if x_index < 3 and y_index > 5:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(6, 9):
-                for x in range(3):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
 
-        if 2 < x_index < 6 and y_index > 5:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(6, 9):
-                for x in range(3, 6):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3, 6):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3, 6):
+                    for x in range(3):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
 
-        if x_index > 5 and y_index > 5:
-            domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-            for y in range(6, 9):
-                for x in range(6, 9):
-                    for num in self._domains[y][x]:
-                        if num == 1:
-                            domain_count_list[0] += 1
-                        elif num == 2:
-                            domain_count_list[1] += 1
-                        elif num == 3:
-                            domain_count_list[2] += 1
-                        elif num == 4:
-                            domain_count_list[3] += 1
-                        elif num == 5:
-                            domain_count_list[4] += 1
-                        elif num == 6:
-                            domain_count_list[5] += 1
-                        elif num == 7:
-                            domain_count_list[6] += 1
-                        elif num == 8:
-                            domain_count_list[7] += 1
-                        elif num == 9:
-                            domain_count_list[8] += 1
-            for i in range(len(domain_count_list)):
-                if domain_count_list[i] == 1:
-                    self._domains[y][x] = []
-                    self._layout[y, x] = i
+
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3, 6):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3, 6):
+                    for x in range(3, 6):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
+
+
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(3, 6):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(3, 6):
+                    for x in range(6, 9):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
+
+
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(6, 9):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(6, 9):
+                    for x in range(3):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
+
+
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(6, 9):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(6, 9):
+                    for x in range(3, 6):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
+
+
+        domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        for y in range(6, 9):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num == 1:
+                        domain_count_list[0] += 1
+                    elif num == 2:
+                        domain_count_list[1] += 1
+                    elif num == 3:
+                        domain_count_list[2] += 1
+                    elif num == 4:
+                        domain_count_list[3] += 1
+                    elif num == 5:
+                        domain_count_list[4] += 1
+                    elif num == 6:
+                        domain_count_list[5] += 1
+                    elif num == 7:
+                        domain_count_list[6] += 1
+                    elif num == 8:
+                        domain_count_list[7] += 1
+                    elif num == 9:
+                        domain_count_list[8] += 1
+        for i in range(9):
+            if domain_count_list[i] == 1:
+                for y in range(6, 9):
+                    for x in range(6, 9):
+                        if i + 1 in self._domains[y][x]:
+                            self._domains[y][x] = []
+                            self._layout[y, x] = i + 1
 
     def get_domain_all(self):
         return self._domains
