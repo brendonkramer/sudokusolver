@@ -24,14 +24,11 @@ puzzle = np.matrix([[0, 0, 3, 0, 2, 0, 6, 0, 0],
 board = Board(puzzle)
 print(board.get_layout())
 
+board.calculate_definite_elim()
 
-# for y in range(9):
-#     for x in range(9):
-#         print(y, end = ",")
-#         print(x, end=",")
-#         board.calculate_domain(x, y)
+board.calculate_single_instances()
 
-board.solve()
+#board.solve()
 
 # algo 2
 # while board.get_blanks() > 0:
@@ -58,4 +55,4 @@ board.solve()
 #                     board.get_layout()[y, x] = answer[0]
 #                     zero_count = zero_count - 1
 
-print(board.get_layout())
+#print(board.get_layout())
