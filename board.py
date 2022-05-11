@@ -28,6 +28,15 @@ class Board:
         self._layout = layout
         # self._domains = np.empty([9, 9])
         # self._domains.astype('O')
+        self._correct = np.matrix([[4, 8, 3, 9, 2, 1, 6, 5, 7],
+                                    [9, 6, 7, 3, 4, 5, 8, 2, 1],
+                                    [2, 5, 1, 8, 7, 6, 4, 9, 3],
+                                    [5, 4, 8, 1, 3, 2, 9, 7, 6],
+                                    [7, 2, 9, 5, 6, 4, 1, 3, 8],
+                                    [1, 3, 6, 7, 9, 8, 2, 4, 5],
+                                    [3, 7, 2, 6, 8, 9, 5, 1, 4],
+                                    [8, 1, 4, 2, 5, 3, 7, 6, 9],
+                                    [6, 9, 5, 4, 1, 7, 3, 8, 2]])
         self._domains = [[[],[],[],[],[],[],[],[],[]],
                          [[],[],[],[],[],[],[],[],[]],
                          [[],[],[],[],[],[],[],[],[]],
@@ -82,11 +91,82 @@ class Board:
     def get_blanks(self):
         return self._blanks
 
-    def calculate_definite_elim(self):
+    def place(self, num, x_index, y_index):
+        if num != self._correct[y_index, x_index]:
+            print("fuck")
+        self._layout[y_index, x_index] = num
+        self._domains[y_index][x_index] = []
+        self._blanks -= 1
+        for x in range(9):
+            if num in self._domains[y_index][x]:
+                self._domains[y_index][x].remove(num)
+        for y in range(9):
+            if num in self._domains[y][x_index]:
+                self._domains[y][x_index].remove(num)
+
+        if x_index < 3 and y_index < 3:
+            for y in range(3):
+                for x in range(3):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 2
+        if 2 < x_index < 6 and y_index < 3:
+            for y in range(3):
+                for x in range(3, 6):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 3
+        if x_index > 5 and y_index < 3:
+            for y in range(3):
+                for x in range(6, 9):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 4
+        if x_index < 3 and 2 < y_index < 6:
+            for y in range(3, 6):
+                for x in range(3):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 5
+        if 2 < x_index < 6 and 2 < y_index < 6:
+            for y in range(3, 6):
+                for x in range(3, 6):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 6
+        if x_index > 5 and 2 < y_index < 6:
+            for y in range(3, 6):
+                for x in range(6, 9):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 7
+        if x_index < 3 and y_index > 5:
+            for y in range(6, 9):
+                for x in range(3):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 8
+        if 2 < x_index < 6 and y_index > 5:
+            for y in range(6, 9):
+                for x in range(3, 6):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+        # box 9
+        if x_index > 5 and y_index > 5:
+            for y in range(6, 9):
+                for x in range(6, 9):
+                    if num in self._domains[y][x]:
+                        self._domains[y][x].remove(num)
+
+
+    def calculate_definite_elim(self, first_run = False):
         for y_index in range(9):
             for x_index in range(9):
                 if self._layout[y_index, x_index] == 0:
-                    domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    if first_run is True:
+                        domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    else:
+                        domain_list = self._domains[y_index][x_index]
                     for x in range(9):
                         if self._layout[y_index, x] != 0:
                             if self._layout[y_index, x] in domain_list:
@@ -160,14 +240,12 @@ class Board:
                                         domain_list.remove(self._layout[y + 6, x + 6])
 
                     if len(domain_list) == 1:
-                        if self._layout[y_index, x_index] == 0:
-                            self._layout[y_index, x_index] = domain_list[0]
-                            self._blanks -= 1
-                            domain_list = []
+                        self.place(domain_list[0],x_index,y_index)
+                        domain_list = []
                     self._domains[y_index][x_index] = domain_list
-                print(y_index, end=",")
-                print(x_index, end=",")
-                print(self._domains[y_index][x_index])
+                # print(y_index, end=",")
+                # print(x_index, end=",")
+                # print(self._domains[y_index][x_index])
 
     def calculate_single_instances(self):
         for y in range(9):
@@ -196,9 +274,7 @@ class Board:
                 if domain_count_list[i] == 1:
                     for x in range(9):
                         if i+1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i+1
-
+                            self.place(i+1, x, y)
 
         for x in range(9):
             domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -226,10 +302,9 @@ class Board:
                 if domain_count_list[i] == 1:
                     for y in range(9):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
+                            self.place(i+1, x, y)
+
         #first box
-
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3):
             for x in range(3):
@@ -257,9 +332,7 @@ class Board:
                 for y in range(3):
                     for x in range(3):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3):
@@ -288,9 +361,7 @@ class Board:
                 for y in range(3):
                     for x in range(3, 6):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3):
@@ -319,9 +390,7 @@ class Board:
                 for y in range(3):
                     for x in range(6, 9):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3, 6):
@@ -350,9 +419,7 @@ class Board:
                 for y in range(3, 6):
                     for x in range(3):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3, 6):
@@ -381,9 +448,7 @@ class Board:
                 for y in range(3, 6):
                     for x in range(3, 6):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(3, 6):
@@ -412,9 +477,7 @@ class Board:
                 for y in range(3, 6):
                     for x in range(6, 9):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(6, 9):
@@ -443,9 +506,7 @@ class Board:
                 for y in range(6, 9):
                     for x in range(3):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(6, 9):
@@ -474,9 +535,7 @@ class Board:
                 for y in range(6, 9):
                     for x in range(3, 6):
                         if i + 1 in self._domains[y][x]:
-                            self._domains[y][x] = []
-                            self._layout[y, x] = i + 1
-
+                            self.place(i+1, x, y)
 
         domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         for y in range(6, 9):

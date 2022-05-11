@@ -24,9 +24,17 @@ puzzle = np.matrix([[0, 0, 3, 0, 2, 0, 6, 0, 0],
 board = Board(puzzle)
 print(board.get_layout())
 
-board.calculate_definite_elim()
 
-board.calculate_single_instances()
+board.calculate_definite_elim(first_run=True)
+
+while board.get_blanks() > 0:
+    prev_blanks = board.get_blanks()
+    board.calculate_definite_elim()
+    board.calculate_single_instances()
+    if prev_blanks == board.get_blanks():
+        break;
+
+
 
 #board.solve()
 
@@ -55,4 +63,4 @@ board.calculate_single_instances()
 #                     board.get_layout()[y, x] = answer[0]
 #                     zero_count = zero_count - 1
 
-#print(board.get_layout())
+print(board.get_layout())
