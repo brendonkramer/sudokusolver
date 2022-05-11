@@ -14,26 +14,23 @@ class Solver():
         self._sudoku_driver.start()
 
     def solve(self, puzzle):
-        print(puzzle.get_layout())
-        zero_count = 0
-        for y in range(9):
-            for x in range(9):
-                if puzzle.get_layout()[y, x] == 0:
-                    zero_count = zero_count + 1
-
-        while zero_count != 0:
+        count = 1
+        while puzzle.get_blanks() > 0:
             for y in range(9):
                 for x in range(9):
-                    if puzzle.get_layout()[y,x] == 0:
-                        if len(puzzle.get_domain(x,y)) == 1:
-                            #print(x)
-                            #print(y)
-                            answer = puzzle.get_domain(x,y)
-                            #print(answer)
-                            puzzle.get_layout()[y,x] = answer[0]
-                            self._sudoku_driver.set_value(x+1,y+1,answer[0])
-                            zero_count = zero_count - 1
-
+                    puzzle.calculate_definite_elim(x, y)
+            for y in range(3):
+                for x in range(3):
+                    puzzle.find_pointing_pairs(x, y)
+            print("RUN " + str(count))
+            count += 1
+            print("PUZZLE \n")
+            print(puzzle.get_layout())
+            print("DOMAIN \n")
+            print(puzzle.get_domain_all())
+        for y in range(9):
+            for x in range(9):
+                self._sudoku_driver.set_value(x,y,puzzle.get_layout[y][x])
         print(puzzle.get_layout())
         self._sudoku_driver.submit()
 

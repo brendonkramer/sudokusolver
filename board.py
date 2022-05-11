@@ -6,13 +6,14 @@
 # imports
 import numpy as np
 
+
 #######################################################################################################################
 # Class: Board
 #######################################################################################################################
 class Board:
-  """
-  Board instance
-  """
+    """
+    Board instance
+    """
 
     def __init__(self, layout):
         """
@@ -27,15 +28,15 @@ class Board:
         self._layout = layout
         # self._domains = np.empty([9, 9])
         # self._domains.astype('O')
-        self._domains = [[[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]],
-                         [[],[],[],[],[],[],[],[],[]]]
+        self._domains = [[[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []],
+                         [[], [], [], [], [], [], [], [], []]]
         self._blanks = 81
         for y in range(9):
             for x in range(9):
@@ -69,15 +70,6 @@ class Board:
     """
         return self._layout
 
-    def solve(self):
-        while self._blanks > 1:
-            for y in range(9):
-                for x in range(9):
-                    self.calculate_definite_elim(x, y)
-            for y in range(3):
-                for x in range(3):
-                    self.find_pointing_pairs(x, y)
-
     def get_blanks(self):
         return self._blanks
 
@@ -91,63 +83,63 @@ class Board:
             if self._layout[y, x_index] != 0:
                 if self._layout[y, x_index] in domain_list:
                     domain_list.remove(self._layout[y, x_index])
-        #box 1
+        # box 1
         if x_index < 3 and y_index < 3:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y, x] != 0:
                         if self._layout[y, x] in domain_list:
                             domain_list.remove(self._layout[y, x])
-        #box 2
+        # box 2
         if 2 < x_index < 6 and y_index < 3:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y, x + 3] != 0:
                         if self._layout[y, x + 3] in domain_list:
                             domain_list.remove(self._layout[y, x + 3])
-        #box 3
+        # box 3
         if x_index > 5 and y_index < 3:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y, x + 6] != 0:
                         if self._layout[y, x + 6] in domain_list:
                             domain_list.remove(self._layout[y, x + 6])
-        #box 4
+        # box 4
         if x_index < 3 and 2 < y_index < 6:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y + 3, x] != 0:
                         if self._layout[y + 3, x] in domain_list:
                             domain_list.remove(self._layout[y + 3, x])
-        #box 5
+        # box 5
         if 2 < x_index < 6 and 2 < y_index < 6:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y + 3, x + 3] != 0:
                         if self._layout[y + 3, x + 3] in domain_list:
                             domain_list.remove(self._layout[y + 3, x + 3])
-        #box 6
+        # box 6
         if x_index > 5 and 2 < y_index < 6:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y + 3, x + 6] != 0:
                         if self._layout[y + 3, x + 6] in domain_list:
                             domain_list.remove(self._layout[y + 3, x + 6])
-        #box 7
+        # box 7
         if x_index < 3 and y_index > 5:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y + 6, x] != 0:
                         if self._layout[y + 6, x] in domain_list:
                             domain_list.remove(self._layout[y + 6, x])
-        #box 8
+        # box 8
         if 2 < x_index < 6 and y_index > 5:
             for y in range(3):
                 for x in range(3):
                     if self._layout[y + 6, x + 3] != 0:
                         if self._layout[y + 6, x + 3] in domain_list:
                             domain_list.remove(self._layout[y + 6, x + 3])
-        #box 9
+        # box 9
         if x_index > 5 and y_index > 5:
             for y in range(3):
                 for x in range(3):
@@ -155,7 +147,7 @@ class Board:
                         if self._layout[y + 6, x + 6] in domain_list:
                             domain_list.remove(self._layout[y + 6, x + 6])
 
-        #print(domain_list)
+        # print(domain_list)
         if len(domain_list) == 1:
             if self._layout[y_index, x_index] == 0:
                 self._layout[y_index, x_index] = domain_list[0]
@@ -217,7 +209,7 @@ class Board:
                     if domain_count_list[i] == 1:
                         self._domains[y][x] = []
                         self._layout[y, x] = i
-        #first box
+        # first box
         if x_index < 3 and y_index < 3:
             domain_count_list = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             for y in range(3):
@@ -470,6 +462,9 @@ class Board:
                     self._domains[y][x] = []
                     self._layout[y, x] = i
 
+    def get_domain_all(self):
+        return self._domains
+
     def get_domain(self, x, y):
         return self._domains[y][x]
 
@@ -482,19 +477,20 @@ class Board:
                         self._blanks -= 1
 
     def find_pointing_pairs(self, box_x_index, box_y_index):
-        # column search
 
-        domain_per_row_in_box = [set(),set(),set()]
+        domain_per_row_in_box = [set(), set(), set()]
         for y in range(3):
             for x in range(3):
                 if self._layout[y, x] == 0:
                     for domain in self._domains[y][x]:
                         domain_per_row_in_box[y].add(domain)
-        union = set.union(domain_per_row_in_box[0],domain_per_row_in_box[1], domain_per_row_in_box[2])
+        union = set.union(domain_per_row_in_box[0], domain_per_row_in_box[1], domain_per_row_in_box[2])
         intersection = set.intersection(domain_per_row_in_box[0], domain_per_row_in_box[1])
         intersection1 = set.intersection(domain_per_row_in_box[1], domain_per_row_in_box[2])
         intersection2 = set.intersection(domain_per_row_in_box[2], domain_per_row_in_box[0])
-        pointing_pairs =  union - set.union(intersection, intersection1, intersection2)
+        pointing_pairs = union - set.union(intersection, intersection1, intersection2)
+        print(box_x_index)
+        print(box_y_index)
         print(pointing_pairs)
         for pointing_pair in pointing_pairs:
             for index in range(3):
@@ -513,14 +509,14 @@ class Board:
         intersection1 = set.intersection(domain_per_col_in_box[1], domain_per_col_in_box[2])
         intersection2 = set.intersection(domain_per_col_in_box[2], domain_per_col_in_box[0])
         pointing_pairs = union - set.union(intersection, intersection1, intersection2)
+        print(box_x_index)
+        print(box_y_index)
         print(pointing_pairs)
         for pointing_pair in pointing_pairs:
             for index in range(3):
                 if pointing_pair in domain_per_col_in_box[index]:
-                    self.remove_num_from_col(index + (box_y_index * 3), pointing_pair, box_x_index)
+                    self.remove_num_from_col(index + (box_x_index * 3), pointing_pair, box_x_index)
                     break
-
-        self.solve()
 
     def remove_num_from_row(self, index, num, box_x_index=None):
         count = 0
@@ -528,10 +524,10 @@ class Board:
             if box_x_index == 0:
                 if count > 2 and num in domain:
                     domain.remove(num)
-            if box_x_index == 1:
-                if count < 3 or count > 5 and num in domain:
+            elif box_x_index == 1:
+                if (count < 3 or count > 5) and num in domain:
                     domain.remove(num)
-            if box_x_index == 2:
+            elif box_x_index == 2:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
@@ -545,16 +541,15 @@ class Board:
             if box_y_index == 0:
                 if count > 2 and num in domain:
                     domain.remove(num)
-            if box_y_index == 1:
-                if count < 3 or count > 5 and num in domain:
+            elif box_y_index == 1:
+                if (count < 3 or count > 5) and num in domain:
                     domain.remove(num)
-            if box_y_index == 2:
+            elif box_y_index == 2:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
                 domain.remove(num)
             count += 1
-
 
     # def get_naked_doubles(self):
 
