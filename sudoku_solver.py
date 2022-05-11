@@ -30,6 +30,8 @@ class Solver():
             print("\nDOMAIN Point Pairs")
             puzzle.get_domain_all()
             puzzle.calculate_definite_elim()
+            print("\nDOMAIN Calc after Point Pairs")
+            puzzle.get_domain_all()
             puzzle.find_naked_doubles()
             print("RUN " + str(count))
             count += 1

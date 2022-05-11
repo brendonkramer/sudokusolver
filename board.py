@@ -559,9 +559,10 @@ class Board:
                             self.remove_num_from_col(index + (box_x_index * 3), pointing_pair, box_y_index)
                             break
 
-    def remove_num_from_row(self, index, num, box_x_index=None):
+    def remove_num_from_row(self, index, num, box_x_index=None, ignore_cols=None):
         count = 0
-        for domain in self._domains[index]:
+        for col in range(len(self._domains[index])):
+            domain = self._domains[index][col]
             if box_x_index == 0:
                 if count > 2 and num in domain:
                     domain.remove(num)
@@ -572,14 +573,18 @@ class Board:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
-                if num in domain:
+                if ignore_cols is not None:
+                    for ignore in ignore_cols:
+                        if ignore != col and num in domain:
+                            domain.remove(num)
+                elif num in domain:
                     domain.remove(num)
             count += 1
 
-    def remove_num_from_col(self, index, num, box_y_index=None):
+    def remove_num_from_col(self, index, num, box_y_index=None, ignore_rows=None):
         count = 0
-        for col in range(9):
-            domain = self._domains[col][index]
+        for row in range(9):
+            domain = self._domains[row][index]
             if box_y_index == 0:
                 if count > 2 and num in domain:
                     domain.remove(num)
@@ -590,7 +595,11 @@ class Board:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
-                if num in domain:
+                if ignore_rows is not None:
+                    for ignore in ignore_rows:
+                        if ignore != row and num in domain:
+                            domain.remove(num)
+                elif num in domain:
                     domain.remove(num)
             count += 1
 
@@ -602,13 +611,39 @@ class Board:
                 if len(self._domains[y][x]) == 2:
                     row_naked_doubles[y].append(self._domains[y][x])
                     col_naked_doubles[x].append(self._domains[y][x])
-
+        print("Naked Doubles:")
         print(row_naked_doubles)
         print(col_naked_doubles)
-        for row in row_naked_doubles:
-            pass
 
+        dict_row_double_to_remove = {}
+        for index in range(len(row_naked_doubles)):
+            row = row_naked_doubles[index]
+            if len(row) > 1:
+                for index_row in range(len(row)):
+                    count = 0
+                    for double in row:
+                        if double == row[index_row]:
+                            count += 1
+                            if(count == 2):
+                                dict_row_double_to_remove[index] = double
 
+        for index in dict_row_double_to_remove:
+            self.remove_num_from_row(index, dict_row_double_to_remove[index])
+
+        dict_col_double_to_remove = {}
+        for index in range(len(col_naked_doubles)):
+            col = col_naked_doubles[index]
+            if len(col) > 1:
+                for index_col in range(len(col)):
+                    count = 0
+                    for double in col:
+                        if double == col[index_col]:
+                            count += 1
+                            if (count == 2):
+                                dict_col_double_to_remove[index] = double
+
+        for index in dict_col_double_to_remove:
+            self.remove_num_from_col(index, dict_col_double_to_remove[index])
     #   # rows
     #   # doubles_list = []
     #   # for x in range(9):
