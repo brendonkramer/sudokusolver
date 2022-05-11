@@ -30,14 +30,14 @@ class Driver():
 
     def set_value(self, x, y, value):
         element = "//table[@id=\'puzzle_grid\']/tbody/tr"
-        if x == 0:
+        if y == 0:
             element += "/"
         else:
-            element += "[" + str(y) + "]/"
-        if y == 0:
+            element += "[" + str(y+1) + "]/"
+        if x == 0:
             element += "td/"
         else:
-            element += "td[" + str(x) + "]/"
+            element += "td[" + str(x+1) + "]/"
         element += "input"
         web_element = self._driver.find_element(By.XPATH, element)
         web_element.send_keys(str(value))
