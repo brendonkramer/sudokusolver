@@ -75,11 +75,14 @@ class Board:
     def get_blanks(self):
         return self._blanks
 
-    def calculate_definite_elim(self):
+    def calculate_definite_elim(self, first_run = False):
         for y_index in range(9):
             for x_index in range(9):
-                if self._layout[y_index, x_index] == 0:
+                if first_run is True:
                     domain_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                else:
+                    domain_list = self._domains[y_index][x_index]
+                if self._layout[y_index, x_index] == 0:
                     for x in range(9):
                         if self._layout[y_index, x] != 0:
                             if self._layout[y_index, x] in domain_list:
@@ -151,14 +154,19 @@ class Board:
                                 if self._layout[y + 6, x + 6] != 0:
                                     if self._layout[y + 6, x + 6] in domain_list:
                                         domain_list.remove(self._layout[y + 6, x + 6])
-
-            # print(domain_list)
-            if len(domain_list) == 1:
-                if self._layout[y_index, x_index] == 0:
-                    self._layout[y_index, x_index] = domain_list[0]
-                    self._blanks -= 1
+                else:
                     domain_list = []
-            self._domains[y_index][x_index] = domain_list
+                # print(domain_list)
+                if len(domain_list) == 1:
+                    if self._layout[y_index, x_index] == 0:
+                        num = domain_list[0]
+                        self._layout[y_index, x_index] = num
+                        self._blanks -= 1
+                        self.remove_num_from_col(x_index, num)
+                        self.remove_num_from_row(y_index, num)
+                        domain_list = []
+                self._domains[y_index][x_index] = domain_list
+        #print(self._layout)
 
     def calculate_single_instances(self):
         for y in range(9):
@@ -500,7 +508,8 @@ class Board:
                             self._layout[y, x] = i + 1
 
     def get_domain_all(self):
-        return self._domains
+        for domain in self._domains:
+            print(domain)
 
     def get_domain(self, x, y):
         return self._domains[y][x]
@@ -513,41 +522,42 @@ class Board:
                         self._layout[y, x] = self._domains[y][x][0]
                         self._blanks -= 1
 
-    def find_pointing_pairs(self, box_x_index, box_y_index):
+    def find_pointing_pairs(self):
+        for box_y_index in range(3):
+            for box_x_index in range(3):
+                domain_per_row_in_box = [set(), set(), set()]
+                for y in range(3):
+                    for x in range(3):
+                        if self._layout[y, x] == 0:
+                            for domain in self._domains[y][x]:
+                                domain_per_row_in_box[y].add(domain)
+                union = set.union(domain_per_row_in_box[0], domain_per_row_in_box[1], domain_per_row_in_box[2])
+                intersection = set.intersection(domain_per_row_in_box[0], domain_per_row_in_box[1])
+                intersection1 = set.intersection(domain_per_row_in_box[1], domain_per_row_in_box[2])
+                intersection2 = set.intersection(domain_per_row_in_box[2], domain_per_row_in_box[0])
+                pointing_pairs = union - set.union(intersection, intersection1, intersection2)
+                for pointing_pair in pointing_pairs:
+                    for index in range(3):
+                        if pointing_pair in domain_per_row_in_box[index]:
+                            self.remove_num_from_row(index + (box_y_index * 3), pointing_pair, box_x_index)
+                            break
 
-        domain_per_row_in_box = [set(), set(), set()]
-        for y in range(3):
-            for x in range(3):
-                if self._layout[y, x] == 0:
-                    for domain in self._domains[y][x]:
-                        domain_per_row_in_box[y].add(domain)
-        union = set.union(domain_per_row_in_box[0], domain_per_row_in_box[1], domain_per_row_in_box[2])
-        intersection = set.intersection(domain_per_row_in_box[0], domain_per_row_in_box[1])
-        intersection1 = set.intersection(domain_per_row_in_box[1], domain_per_row_in_box[2])
-        intersection2 = set.intersection(domain_per_row_in_box[2], domain_per_row_in_box[0])
-        pointing_pairs = union - set.union(intersection, intersection1, intersection2)
-        for pointing_pair in pointing_pairs:
-            for index in range(3):
-                if pointing_pair in domain_per_row_in_box[index]:
-                    self.remove_num_from_row(index + (box_y_index * 3), pointing_pair, box_x_index)
-                    break
-
-        domain_per_col_in_box = [set(), set(), set()]
-        for x in range(3):
-            for y in range(3):
-                if self._layout[y, x] == 0:
-                    for domain in self._domains[y][x]:
-                        domain_per_col_in_box[y].add(domain)
-        union = set.union(domain_per_col_in_box[0], domain_per_col_in_box[1], domain_per_col_in_box[2])
-        intersection = set.intersection(domain_per_col_in_box[0], domain_per_col_in_box[1])
-        intersection1 = set.intersection(domain_per_col_in_box[1], domain_per_col_in_box[2])
-        intersection2 = set.intersection(domain_per_col_in_box[2], domain_per_col_in_box[0])
-        pointing_pairs = union - set.union(intersection, intersection1, intersection2)
-        for pointing_pair in pointing_pairs:
-            for index in range(3):
-                if pointing_pair in domain_per_col_in_box[index]:
-                    self.remove_num_from_col(index + (box_x_index * 3), pointing_pair, box_x_index)
-                    break
+                domain_per_col_in_box = [set(), set(), set()]
+                for x in range(3):
+                    for y in range(3):
+                        if self._layout[y, x] == 0:
+                            for domain in self._domains[y][x]:
+                                domain_per_col_in_box[x].add(domain)
+                union = set.union(domain_per_col_in_box[0], domain_per_col_in_box[1], domain_per_col_in_box[2])
+                intersection = set.intersection(domain_per_col_in_box[0], domain_per_col_in_box[1])
+                intersection1 = set.intersection(domain_per_col_in_box[1], domain_per_col_in_box[2])
+                intersection2 = set.intersection(domain_per_col_in_box[2], domain_per_col_in_box[0])
+                pointing_pairs = union - set.union(intersection, intersection1, intersection2)
+                for pointing_pair in pointing_pairs:
+                    for index in range(3):
+                        if pointing_pair in domain_per_col_in_box[index]:
+                            self.remove_num_from_col(index + (box_x_index * 3), pointing_pair, box_y_index)
+                            break
 
     def remove_num_from_row(self, index, num, box_x_index=None):
         count = 0
@@ -562,7 +572,8 @@ class Board:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
-                domain.remove(num)
+                if num in domain:
+                    domain.remove(num)
             count += 1
 
     def remove_num_from_col(self, index, num, box_y_index=None):
@@ -579,7 +590,8 @@ class Board:
                 if count < 6 and num in domain:
                     domain.remove(num)
             else:
-                domain.remove(num)
+                if num in domain:
+                    domain.remove(num)
             count += 1
 
     def find_naked_doubles(self):
@@ -589,10 +601,13 @@ class Board:
             for x in range(9):
                 if len(self._domains[y][x]) == 2:
                     row_naked_doubles[y].append(self._domains[y][x])
-                    col_naked_doubles[y].append(self._domains[y][x])
+                    col_naked_doubles[x].append(self._domains[y][x])
 
-        row_naked_doubles_counted = collections.Counter(row_naked_doubles)
-        col_naked_doubles_counted = collections.Counter(col_naked_doubles)
+        print(row_naked_doubles)
+        print(col_naked_doubles)
+        for row in row_naked_doubles:
+            pass
+
 
     #   # rows
     #   # doubles_list = []

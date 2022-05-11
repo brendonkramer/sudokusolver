@@ -15,22 +15,26 @@ class Solver():
 
     def solve(self, puzzle):
         count = 1
+        puzzle.calculate_definite_elim(True)
+        print("\nPUZZLE 1")
+        print(puzzle.get_layout())
+        print("\nDOMAIN 1")
+        puzzle.get_domain_all()
         while puzzle.get_blanks() > 0:
-            for y in range(9):
-                for x in range(9):
-                    puzzle.calculate_definite_elim(x, y)
-            print("DOMAIN 1\n")
-            print(puzzle.get_domain_all())
-            for y in range(3):
-                for x in range(3):
-                    puzzle.find_pointing_pairs(x, y)
+            puzzle.calculate_definite_elim()
+            print("\nPUZZLE Calc")
+            print(puzzle.get_layout())
+            print("\nDOMAIN Calc")
+            puzzle.get_domain_all()
+            puzzle.find_pointing_pairs()
+            print("\nDOMAIN Point Pairs")
+            puzzle.get_domain_all()
+            puzzle.calculate_definite_elim()
+            puzzle.find_naked_doubles()
             print("RUN " + str(count))
             count += 1
-            print("PUZZLE \n")
+            print("PUZZLE End Loop\n")
             print(puzzle.get_layout())
-            print("DOMAIN 2 \n")
-            print(puzzle.get_domain_all())
-            puzzle.find_naked_doubles()
         for y in range(9):
             for x in range(9):
                 self._sudoku_driver.set_value(x,y,puzzle.get_layout()[y][x])
