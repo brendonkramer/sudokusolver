@@ -1,5 +1,7 @@
 import numpy as np
 from board import Board
+import itertools
+from itertools import combinations, chain
 
 puzzle = np.matrix([[0, 0, 3, 0, 2, 0, 6, 0, 0],
                     [9, 0, 0, 3, 0, 5, 0, 0, 1],
@@ -24,17 +26,14 @@ puzzle = np.matrix([[0, 0, 3, 0, 2, 0, 6, 0, 0],
 board = Board(puzzle)
 print(board.get_layout())
 
-
 board.calculate_definite_elim(first_run=True)
-
-while board.get_blanks() > 0:
-    prev_blanks = board.get_blanks()
-    board.calculate_definite_elim()
-    board.calculate_single_instances()
-    if prev_blanks == board.get_blanks():
-        break;
-
-
+board.calculate_naked_n(4)
+# while board.get_blanks() > 0:
+#     prev_blanks = board.get_blanks()
+#     board.calculate_definite_elim()
+#     board.calculate_single_instances()
+#     if prev_blanks == board.get_blanks():
+#         break;
 
 #board.solve()
 
