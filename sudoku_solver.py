@@ -50,7 +50,7 @@ class Solver():
             print(puzzle.get_layout())
         for y in range(9):
             for x in range(9):
-                self._sudoku_driver.set_value(x,y,puzzle.get_layout()[y][x])
+                self._sudoku_driver.set_value(x,y,puzzle.get_layout()[y, x])
         print(puzzle.get_layout())
         self._sudoku_driver.submit()
 
@@ -80,19 +80,23 @@ class Solver():
         return True
 
     def back_track(self, puzzle):
-        for row in range(0, 9):
-            for col in range(0, 9):
-                cell = puzzle.get_layout()[row, col]
-                if cell == 0:
-                    domain = puzzle.get_domain(col, row)
-                    for val in domain:
-                        if self.is_possible_to_place(puzzle,col, row,val):
-                            puzzle.get_layout()[col, row] = val
-                            #puzzle.place(val, col, row)
-                            print(puzzle.get_layout())
-                            if self.back_track(puzzle):
-                                return True
-                            # Bad choice, make it blank and check again
-                            puzzle.get_layout()[col, row] = 0
+        cell_index = puzzle.find_blank()
+        if cell_index == None:
+            return True
+        row = cell_index[0]
+        col = cell_index[1]
+        cell = puzzle.get_layout()[row, col]
+        if cell == 0:
+            domain = puzzle.get_domain(col, row)
+            for val in domain:
+                if self.is_possible_to_place(puzzle,row, col,val):
+                    puzzle.get_layout()[row, col] = val
+                    puzzle.sub_blank()
+                    if self.back_track(puzzle):
+                        return True
+                    else:
+                        # Bad choice, make it blank and check again
+                        puzzle.get_layout()[row, col] = 0
+                        puzzle.add_blank()
         return False
         print(puzzle.get_layout())

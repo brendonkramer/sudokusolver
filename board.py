@@ -54,11 +54,33 @@ class Board:
     :rtype: int
     """
         index = None
-        for row in range(len(self._layout)):
-            for col in range(len(self._layout[row])):
-                if (self._layout[row][col] == 0):
-                    index = [row, col]
-        return index
+        for row in range(9):
+            for col in range(9):
+                if (self._layout[row, col] == 0):
+                    return [row, col]
+
+    #######################################################################################################################
+    # Function: find_blank
+    #######################################################################################################################
+    def sub_blank(self):
+        """
+    Finds blank tile in the 2d array of this Board
+    :return: index of blank
+    :rtype: int
+    """
+        self._blanks -= 1
+
+    #######################################################################################################################
+    # Function: find_blank
+    #######################################################################################################################
+    def add_blank(self):
+        """
+    Finds blank tile in the 2d array of this Board
+    :return: index of blank
+    :rtype: int
+    """
+        self._blanks += 1
+
     #######################################################################################################################
     # Function: get_layout
     #######################################################################################################################
