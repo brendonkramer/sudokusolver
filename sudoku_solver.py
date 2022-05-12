@@ -25,6 +25,9 @@ class Solver():
             prev_blanks = puzzle.get_blanks()
             puzzle.calculate_definite_elim()
             puzzle.calculate_single_instances()
+            puzzle.calculate_naked_n(3)
+            puzzle.calculate_naked_n(4)
+            puzzle.calculate_naked_n(5)
             #print("\nPUZZLE Calc")
             #print(puzzle.get_layout())
             #print("\nDOMAIN Calc")
@@ -85,6 +88,7 @@ class Solver():
                     for val in domain:
                         if self.is_possible_to_place(puzzle,col, row,val):
                             puzzle.get_layout()[col, row] = val
+                            #puzzle.place(val, col, row)
                             print(puzzle.get_layout())
                             if self.back_track(puzzle):
                                 return True
