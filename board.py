@@ -7,7 +7,7 @@
 import collections
 
 import numpy as np
-
+import itertools
 
 #######################################################################################################################
 # Class: Board
@@ -548,6 +548,350 @@ class Board:
     def get_domain_all(self):
         for domain in self._domains:
             print(domain)
+            
+    def calculate_naked_n(self, n):
+        # rows
+        for y in range(9):
+            collective_domain_set = set()
+            for x in range(9):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+            subset_list = list(itertools.combinations(collective_domain_set,n))
+            for subset in subset_list:
+                count = 0
+                n_size_groups_index_list = []
+                for x in range(9):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_groups_index_list.append(x)
+                if count == n:
+                    # oooo baby a triple
+                    for x in range(9):
+                        if x not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+        # columns
+        for x in range(9):
+            collective_domain_set = set()
+            for y in range(9):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+            subset_list = list(itertools.combinations(collective_domain_set,n))
+            for subset in subset_list:
+                count = 0
+                n_size_groups_index_list = []
+                for y in range(9):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_groups_index_list.append(y)
+                if count == n:
+                    # oooo baby a triple
+                    for y in range(9):
+                        if y not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        #box 1
+        collective_domain_set = set()
+        for y in range(3):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3):
+                for x in range(3):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3):
+                    for x in range(3):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 2
+        collective_domain_set = set()
+        for y in range(3):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3):
+                for x in range(3, 6):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3):
+                    for x in range(3, 6):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 3
+        collective_domain_set = set()
+        for y in range(3):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3):
+                for x in range(6, 9):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3):
+                    for x in range(6, 9):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 4
+        collective_domain_set = set()
+        for y in range(3, 6):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3, 6):
+                for x in range(3):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3, 6):
+                    for x in range(3):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 5
+        collective_domain_set = set()
+        for y in range(3, 6):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3, 6):
+                for x in range(3, 6):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3, 6):
+                    for x in range(3, 6):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 6
+        collective_domain_set = set()
+        for y in range(3, 6):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(3, 6):
+                for x in range(6, 9):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(3, 6):
+                    for x in range(6, 9):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 7
+        collective_domain_set = set()
+        for y in range(6, 9):
+            for x in range(3):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(6, 9):
+                for x in range(3):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(6, 9):
+                    for x in range(3):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 8
+        collective_domain_set = set()
+        for y in range(6, 9):
+            for x in range(3, 6):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(6, 9):
+                for x in range(3, 6):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(6, 9):
+                    for x in range(3, 6):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
+
+        # box 9
+        collective_domain_set = set()
+        for y in range(6, 9):
+            for x in range(6, 9):
+                for num in self._domains[y][x]:
+                    if num not in collective_domain_set:
+                        collective_domain_set.add(num)
+        subset_list = list(itertools.combinations(collective_domain_set, n))
+        for subset in subset_list:
+            count = 0
+            n_size_groups_index_list = []
+            for y in range(6, 9):
+                for x in range(6, 9):
+                    if len(self._domains[y][x]) > 0:
+                        if set(self._domains[y][x]).issubset(set(subset)):
+                            count += 1
+                            n_size_group_index = [y, x]
+                            n_size_groups_index_list.append(n_size_group_index)
+            if count == n:
+                # oooo baby a triple
+                for y in range(6, 9):
+                    for x in range(6, 9):
+                        index_pair = [y, x]
+                        if index_pair not in n_size_groups_index_list:
+                            i = 0
+                            while i < len(self._domains[y][x]):
+                                num = self._domains[y][x][i]
+                                if num in list(subset):
+                                    self._domains[y][x].remove(num)
+                                else:
+                                    i += 1
 
     def get_domain(self, x, y):
         return self._domains[y][x]
